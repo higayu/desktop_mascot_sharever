@@ -1,0 +1,372 @@
+🔴コレクションの出力 
+データ構造: {
+  "rows": [
+    {
+      "startDate": "2025-03-15",
+      "description": "小多機能",
+      "status": "active",
+      "completedDate": "",
+      "title": "しょうたき",
+      "id": "04BXVfID4TLAv0wFG9kL",
+      "endDate": "",
+      "metadata": {
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 588000000
+        },
+        "originalCollection": "categories",
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 588000000
+        }
+      },
+      "type": "categorie"
+    },
+    {
+      "id": "1745644808169",
+      "startDate": "2024-09-26",
+      "title": "NFC_勤怠",
+      "description": "nfcの読み取りとpython、Raspberrypi pico w2\nを使用した打刻システム",
+      "created_at": {
+        "seconds": 1745644808,
+        "nanoseconds": 169000000
+      },
+      "updated_at": {
+        "seconds": 1745644808,
+        "nanoseconds": 169000000
+      },
+      "endDate": "",
+      "completedDate": "",
+      "status": "active"
+    }
+  ],
+  "metadata": {
+    "totalCount": 1,
+    "lastUpdated": {
+      "seconds": 1745643108,
+      "nanoseconds": 588000000
+    }
+  }
+}
+TaskManager.vue:460 ------------------------------
+TaskManager.vue:458 
+ドキュメントID: memos
+TaskManager.vue:459 データ構造: {
+  "metadata": {
+    "lastUpdated": {
+      "seconds": 1745643108,
+      "nanoseconds": 677000000
+    },
+    "totalCount": 6
+  },
+  "rows": [
+    {
+      "projectId": "R97lr2wqUUtlzV6qxo8v",
+      "content": "全体に最新の内容のenvファイルを共有出来なかったことが原因でローカルではExcelファイルのダウンロードが上手く行くのに\n本番環境ではExcelファイルのダウンロード処理にエラーが発生する事態になった",
+      "metadata": {
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        },
+        "originalCollection": "memos",
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        }
+      },
+      "title": ".envファイルの共有漏れ",
+      "id": "EiBtygqaXS9vJjSe2dOS",
+      "created_at": {
+        "seconds": 1745025539,
+        "nanoseconds": 171000000
+      },
+      "updated_at": {
+        "seconds": 1745025539,
+        "nanoseconds": 171000000
+      },
+      "type": "memo"
+    },
+    {
+      "content": "データベースへのメソッド用のphpファイルの一部に命名規則違反で\nsideBar.phpやprintData.phpを\n**composer dump-autoload**\nで読み込みに失敗してしまったことが原因",
+      "metadata": {
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        },
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        },
+        "originalCollection": "memos"
+      },
+      "type": "memo",
+      "id": "JiTb6dbzO5RVxK51oSQf",
+      "updated_at": {
+        "seconds": 1745026859,
+        "nanoseconds": 321000000
+      },
+      "projectId": "XJBo64g1jES6S9NrM6PW",
+      "created_at": {
+        "seconds": 1745026665,
+        "nanoseconds": 577000000
+      },
+      "title": "Laravelのファイルの命名規則に違反"
+    },
+    {
+      "metadata": {
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        },
+        "originalCollection": "memos",
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        }
+      },
+      "projectId": "gRS3HaYIYNoDVTNT5Wyo",
+      "type": "memo",
+      "created_at": {
+        "seconds": 1745026490,
+        "nanoseconds": 565000000
+      },
+      "updated_at": {
+        "seconds": 1745026490,
+        "nanoseconds": 565000000
+      },
+      "content": "GPSの取得、現在位置と登録座標の距離を判定し、自動で動画を流す機能が、宮島の電波が不安定で脆弱な環境で起動しないトラブル発生。原因はWebViewとGPSの判定機能の処理を分離してマルチタスクを意識して作成できていなかったことが一番の原因。\nまた、WebViewのcookieを渡す機能も要因の1つの可能性があった",
+      "id": "MWD1pklYeIW7HDFFnG9d",
+      "title": "GPSの定期的な座標判定機能のバグ"
+    },
+    {
+      "type": "memo",
+      "projectId": "XJBo64g1jES6S9NrM6PW",
+      "title": "envファイルの書き換え",
+      "content": "envファイルでトラブルになるくらいなら \n<span class=\"text-red-bold\">納品の手前</span> までは\nエンドポイントを **直書き** してテストする。\n\n<u>envに値を追加するとき</u>に管理者に\n**最後にまとめて一括** で追加してもらうようにする",
+      "id": "Y4Sgji1AxZmXYqG43fFE",
+      "created_at": {
+        "seconds": 1745554602,
+        "nanoseconds": 248000000
+      },
+      "metadata": {
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        },
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        },
+        "originalCollection": "memos"
+      },
+      "updated_at": {
+        "seconds": 1745580406,
+        "nanoseconds": 375000000
+      }
+    },
+    {
+      "updated_at": {
+        "seconds": 1745152982,
+        "nanoseconds": 75000000
+      },
+      "type": "memo",
+      "projectId": "XJBo64g1jES6S9NrM6PW",
+      "title": "Linuxのファイルの権限",
+      "metadata": {
+        "originalCollection": "memos",
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        },
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        }
+      },
+      "id": "ulXbwd62oBqhDdVvgUHa",
+      "created_at": {
+        "seconds": 1745152982,
+        "nanoseconds": 75000000
+      },
+      "content": "Linux環境にテストするためにLaravelのプロジェクトを入れてApacheで起動したが、permissionとApacheの設定不足で開けなかった"
+    },
+    {
+      "title": "Laravelの認証が本番でエラー",
+      "id": "z4nd9RnUAslaDgOohOjN",
+      "updated_at": {
+        "seconds": 1745027970,
+        "nanoseconds": 134000000
+      },
+      "created_at": {
+        "seconds": 1745027071,
+        "nanoseconds": 201000000
+      },
+      "content": "# エラーの原因\n認証に使用していたModelのUser.phpの書き方が **古いバージョン** だった為、ローカルでは動くのに、本番環境ではフィラメントの管理画面のログインが上手くいかないという状況になった\n[詳細のURL](https://qiita.com/studyhiminato1107/items/6a4b7accbf6c38884465)",
+      "projectId": "XJBo64g1jES6S9NrM6PW",
+      "metadata": {
+        "originalCollection": "memos",
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        },
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 677000000
+        }
+      },
+      "type": "memo"
+    },
+    {
+      "projectId": "1745722146224",
+      "content": "共有しなければならないことが多いから一時的に近くで作業したいと許可を貰わずにしてしまった\n\nまた、でしおでもデータベースのプロシージャを書き換えて情報共有せずに作業から離脱してしまうことがあった",
+      "updated_at": {
+        "seconds": 1745722405,
+        "nanoseconds": 369000000
+      },
+      "title": "許可を取らずに強硬した",
+      "created_at": {
+        "seconds": 1745722405,
+        "nanoseconds": 369000000
+      },
+      "id": "1745722405369"
+    }
+  ]
+}
+TaskManager.vue:460 ------------------------------
+TaskManager.vue:458 
+ドキュメントID: projects
+TaskManager.vue:459 データ構造: {
+  "metadata": {
+    "totalCount": 4,
+    "lastUpdated": {
+      "seconds": 1745722146,
+      "nanoseconds": 224000000
+    }
+  },
+  "rows": [
+    {
+      "completedDate": "",
+      "type": "project",
+      "endDate": "",
+      "startDate": "2024-08-01",
+      "id": "R97lr2wqUUtlzV6qxo8v",
+      "description": "デイケアサービスの個人記録管理システムをWebアプリケーションで作成",
+      "status": "active",
+      "metadata": {
+        "originalCollection": "projects",
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 776000000
+        },
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 776000000
+        }
+      },
+      "title": "でしお個人記録管理システム"
+    },
+    {
+      "endDate": "",
+      "metadata": {
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 776000000
+        },
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 776000000
+        },
+        "originalCollection": "projects"
+      },
+      "completedDate": "",
+      "title": "小多機能",
+      "description": "小多機能サービスの個人記録管理システムをWebアプリケーションで作成",
+      "type": "project",
+      "status": "active",
+      "startDate": "2025-03-19",
+      "id": "XJBo64g1jES6S9NrM6PW"
+    },
+    {
+      "status": "active",
+      "endDate": "",
+      "metadata": {
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 776000000
+        },
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 776000000
+        },
+        "originalCollection": "projects"
+      },
+      "description": "Xcodeで作成\n観光情報をWebViewで閲覧\nクイズをしながらGPSで自動で動画を視聴できるiosアプリケーション",
+      "id": "gRS3HaYIYNoDVTNT5Wyo",
+      "completedDate": "",
+      "title": "カープタクシー 観光案内アプリ",
+      "startDate": "2025-01-22",
+      "type": "project"
+    },
+    {
+      "title": "てあつい整体",
+      "id": "1745722146224",
+      "metadata": {
+        "updatedAt": {
+          "seconds": 1745722146,
+          "nanoseconds": 224000000
+        },
+        "createdAt": {
+          "seconds": 1745722146,
+          "nanoseconds": 224000000
+        },
+        "originalCollection": "projects"
+      },
+      "status": "completed",
+      "description": "webサイトの作成",
+      "type": "project"
+    }
+  ]
+}
+TaskManager.vue:460 ------------------------------
+TaskManager.vue:458 
+ドキュメントID: tasks
+TaskManager.vue:459 データ構造: {
+  "metadata": {
+    "totalCount": 1,
+    "lastUpdated": {
+      "seconds": 1745643108,
+      "nanoseconds": 843000000
+    }
+  },
+  "rows": [
+    {
+      "checked": true,
+      "type": "task",
+      "updated_at": {
+        "seconds": 1745722459,
+        "nanoseconds": 285000000
+      },
+      "priority": 0,
+      "title": "テストのタスク",
+      "metadata": {
+        "createdAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 843000000
+        },
+        "updatedAt": {
+          "seconds": 1745643108,
+          "nanoseconds": 843000000
+        },
+        "originalCollection": "tasks"
+      },
+      "created_at": {
+        "seconds": 1745634125,
+        "nanoseconds": 412000000
+      },
+      "id": "jBqVvOLgjxtv99m0NACY",
+      "projectId": "04BXVfID4TLAv0wFG9kL",
+      "content": "タスクの内容"
+    }
+  ]
+}
+T
