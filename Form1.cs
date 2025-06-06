@@ -10,10 +10,12 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 
-namespace DesktopMascot_Share {
+namespace DesktopMascot_Share
+{
 
     #region ----------------- enum うさまるのモード ----------------------------
-    public enum Usamaru_Mode {
+    public enum Usamaru_Mode
+    {
         Stop,
         Patoka,
         Walk,
@@ -24,7 +26,8 @@ namespace DesktopMascot_Share {
     }
     #endregion ----------------- enum うさまるのモード 末尾 ----------------------------
 
-    public partial class Form1 : Form {
+    public partial class Form1 : Form
+    {
 
         #region ----------------- フィールド ----------------------------
         //private SoundPlayer Sound_Item;
@@ -52,7 +55,8 @@ namespace DesktopMascot_Share {
         #endregion ----------------- フィールド 末尾 ----------------------------
 
         #region ----------------- 初期化 ----------------------------
-        public Form1() {
+        public Form1()
+        {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;
             this.TopMost = true;
@@ -80,7 +84,7 @@ namespace DesktopMascot_Share {
             this.MouseDown += Form1_MouseDown;
             this.MouseMove += Form1_MouseMove;
             this.MouseUp += Form1_MouseUp;
-            
+
             clipboardHistory = new ClipboardHistoryManager();
 
             this.contextMenuStrip1.Items.Add("ファイルのパスを作成", null, Get_File_Paths);
@@ -92,10 +96,14 @@ namespace DesktopMascot_Share {
             _ = InitializeFirebaseDataAsync();
         }
 
-        private async Task InitializeFirebaseDataAsync() {
-            try {
+        private async Task InitializeFirebaseDataAsync()
+        {
+            try
+            {
                 await LoadData();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 System.Diagnostics.Debug.WriteLine($"Error in InitializeFirebaseDataAsync: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                 MessageBox.Show($"データの初期化中にエラーが発生しました: {ex.Message}", "エラー",
@@ -105,24 +113,32 @@ namespace DesktopMascot_Share {
         #endregion ----------------- 初期化 末尾 ----------------------------
 
         #region ----------------- 便利機能 ----------------------------
-        private async Task LoadData() {
-            try {
-                
-                 // 設定の処理
-            } catch (Exception ex) {
+        private async Task LoadData()
+        {
+            try
+            {
+
+                // 設定の処理
+            }
+            catch (Exception ex)
+            {
                 System.Diagnostics.Debug.WriteLine($"Error loading data: {ex.Message}");
                 MessageBox.Show($"データの読み込み中にエラーが発生しました: {ex.Message}", "エラー",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private async void Get_File_Paths(object sender, EventArgs e) {
-            using (FolderBrowserDialog folderDialog = new FolderBrowserDialog()) {
+        private async void Get_File_Paths(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+            {
                 folderDialog.Description = "ファイル一覧を作成するフォルダを選択してください";
                 folderDialog.ShowNewFolderButton = true;
 
-                if (folderDialog.ShowDialog() == DialogResult.OK) {
-                    try {
+                if (folderDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
                         string selectedPath = folderDialog.SelectedPath;
                         var fileList = new List<string>();
 
@@ -138,14 +154,16 @@ namespace DesktopMascot_Share {
                         });
 
                         // 保存ダイアログを表示
-                        using (SaveFileDialog saveDialog = new SaveFileDialog()) {
+                        using (SaveFileDialog saveDialog = new SaveFileDialog())
+                        {
                             saveDialog.Filter = "テキストファイル (*.txt)|*.txt";
                             saveDialog.Title = "ファイル一覧を保存";
                             saveDialog.FileName = $"ファイル一覧_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
                             saveDialog.DefaultExt = "txt";
                             saveDialog.AddExtension = true;
 
-                            if (saveDialog.ShowDialog() == DialogResult.OK) {
+                            if (saveDialog.ShowDialog() == DialogResult.OK)
+                            {
                                 // ファイルに保存（非同期処理を使用）
                                 await Task.Run(() => {
                                     File.WriteAllLines(saveDialog.FileName, fileList, Encoding.UTF8);
@@ -154,19 +172,23 @@ namespace DesktopMascot_Share {
                             }
                         }
                     }
-                    catch (Exception ex) {
+                    catch (Exception ex)
+                    {
                         MessageBox.Show($"エラーが発生しました：{ex.Message}", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
         }
 
-        private void ProcessDirectory(string path, List<string> fileList, int level) {
+        private void ProcessDirectory(string path, List<string> fileList, int level)
+        {
             string currentIndent = new string(' ', level * 2);
-            try {
+            try
+            {
                 // 現在のディレクトリ内のファイルを取得
                 var files = Directory.GetFiles(path);
-                foreach (var file in files.OrderBy(f => f)) {
+                foreach (var file in files.OrderBy(f => f))
+                {
                     var fileInfo = new FileInfo(file);
                     string fileSize = FormatFileSize(fileInfo.Length);
                     string fileDate = fileInfo.LastWriteTime.ToString("yyyy/MM/dd HH:mm:ss");
@@ -175,27 +197,32 @@ namespace DesktopMascot_Share {
 
                 // サブディレクトリを取得して処理
                 var directories = Directory.GetDirectories(path);
-                foreach (var dir in directories.OrderBy(d => d)) {
+                foreach (var dir in directories.OrderBy(d => d))
+                {
                     var dirInfo = new DirectoryInfo(dir);
                     string dirDate = dirInfo.LastWriteTime.ToString("yyyy/MM/dd HH:mm:ss");
                     fileList.Add($"{currentIndent}📁 {Path.GetFileName(dir)} - {dirDate}");
                     ProcessDirectory(dir, fileList, level + 1);
                 }
             }
-            catch (UnauthorizedAccessException) {
+            catch (UnauthorizedAccessException)
+            {
                 fileList.Add($"{currentIndent}⚠️ アクセスが拒否されたフォルダ: {Path.GetFileName(path)}");
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 fileList.Add($"{currentIndent}⚠️ エラー: {Path.GetFileName(path)} - {ex.Message}");
             }
         }
 
-        private string FormatFileSize(long bytes) {
+        private string FormatFileSize(long bytes)
+        {
             string[] sizes = { "B", "KB", "MB", "GB", "TB" };
             int order = 0;
             double size = bytes;
-            
-            while (size >= 1024 && order < sizes.Length - 1) {
+
+            while (size >= 1024 && order < sizes.Length - 1)
+            {
                 order++;
                 size /= 1024;
             }
@@ -203,48 +230,61 @@ namespace DesktopMascot_Share {
             return $"{size:0.##} {sizes[order]}";
         }
 
-        private void ShowClipboardHistory(object sender, EventArgs e) {
+        private void ShowClipboardHistory(object sender, EventArgs e)
+        {
             ClipboardHistoryForm historyForm = new ClipboardHistoryForm(clipboardHistory);
             historyForm.Show();
         }
         #endregion ----------------- 便利機能 末尾 ----------------------------
 
         #region ----------------- マウス ----------------------------
-        private void Form1_MouseDown(object sender, MouseEventArgs e) {
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
             mouseDown = true;
             mouseOffset = new Point(e.X, e.Y);
         }
 
-        private void Form1_MouseMove(object sender, MouseEventArgs e) {
-            if (mouseDown) {
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDown)
+            {
                 this.Left = Cursor.Position.X - mouseOffset.X;
                 this.Top = Cursor.Position.Y - mouseOffset.Y;
             }
         }
 
-        private void Form1_MouseUp(object sender, MouseEventArgs e) {
+        private void Form1_MouseUp(object sender, MouseEventArgs e)
+        {
             mouseDown = false;
         }
         #endregion ------------------- マウス末尾 ---------------------------------
 
         #region ----------------- Formロード CLOSE ----------------------------
-        private void Form1_Load(object sender, EventArgs e) {
+        private void Form1_Load(object sender, EventArgs e)
+        {
             // アプリケーションの設定を読み込む
             Properties.Settings.Default.Reload();
 
-            try {
+            try
+            {
                 progressBar_Food.Value = Properties.Settings.Default.Food_Level;
                 progressBar_Physical.Value = Properties.Settings.Default.Physical_Strength;
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 System.Diagnostics.Debug.WriteLine($"ロードイベントでエラーキャッチ");
             }
         }
 
-        private void Form1_FormClosed(object sender,System.Windows.Forms.FormClosedEventArgs e) {
-            try {
+        private void Form1_FormClosed(object sender, System.Windows.Forms.FormClosedEventArgs e)
+        {
+            try
+            {
                 Properties.Settings.Default.Food_Level = progressBar_Food.Value;
                 Properties.Settings.Default.Physical_Strength = progressBar_Physical.Value;
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 System.Diagnostics.Debug.WriteLine($"閉じるイベントでエラーキャッチ");
             }
 
@@ -255,16 +295,20 @@ namespace DesktopMascot_Share {
 
 
         #region ----------------- タイマー処理 ----------------------------
-        private void timer1_Tick(object sender, EventArgs e) {
+        private void timer1_Tick(object sender, EventArgs e)
+        {
 
-            switch (usamaru_mode) {
+            switch (usamaru_mode)
+            {
                 case Usamaru_Mode.Patoka:// 自動移動
-                    if (!mouseDown) {
+                    if (!mouseDown)
+                    {
                         this.Left += speedX * direction;
 
                         // 画面端で反転
                         var screenBounds = Screen.PrimaryScreen.WorkingArea;
-                        if (this.Right >= screenBounds.Right || this.Left <= screenBounds.Left) {
+                        if (this.Right >= screenBounds.Right || this.Left <= screenBounds.Left)
+                        {
                             direction *= -1;
                             // 画像を切り替え
                             pictureBox1.Image = (direction == 1) ? Properties.Resources.Patoka_R : Properties.Resources.Patoka_L;
@@ -274,7 +318,9 @@ namespace DesktopMascot_Share {
                         waveCounter += 0.2;
                         int waveOffset = (int)(Math.Sin(waveCounter) * waveAmplitude);
                         this.Top = centerY + waveOffset;
-                    } else {
+                    }
+                    else
+                    {
                         // ドラッグ中は中心Yを更新
                         centerY = this.Top;
                     }
@@ -282,8 +328,10 @@ namespace DesktopMascot_Share {
 
                 case Usamaru_Mode.HiyokoGyu:
                     // ひよこぎゅーアニメーション
-                    if (!mouseDown) {
-                        if (Animation_Frame != 20) {
+                    if (!mouseDown)
+                    {
+                        if (Animation_Frame != 20)
+                        {
                             // フレームを更新
                             Animation_Frame = (Animation_Frame + 1);
 
@@ -296,18 +344,26 @@ namespace DesktopMascot_Share {
 
                 case Usamaru_Mode.PopCone:
                     //  ポップコーンアニメーション
-                    if (!mouseDown) {
-                        if (Animation_Frame != 18) {
+                    if (!mouseDown)
+                    {
+                        if (Animation_Frame != 18)
+                        {
 
-                            if (Return_Anime_Counter >= 5 && Animation_Frame >= 17) {
+                            if (Return_Anime_Counter >= 5 && Animation_Frame >= 17)
+                            {
                                 // フレームを更新
                                 Animation_Frame++;
-                            } else if (Animation_Frame >= 17) {
+                            }
+                            else if (Animation_Frame >= 17)
+                            {
                                 Return_Anime_Counter++;
                                 Animation_Frame = 10;
-                            } else {
+                            }
+                            else
+                            {
                                 // フレームを更新
-                                if ((progressBar_Food.Value + 1) < 100) {
+                                if ((progressBar_Food.Value + 1) < 100)
+                                {
                                     progressBar_Food.Value++;
                                 }
                                 Animation_Frame++;
@@ -330,8 +386,10 @@ namespace DesktopMascot_Share {
 
                 case Usamaru_Mode.Cry:
                     //  Cryアニメーション
-                    if (!mouseDown) {
-                        if (Animation_Frame != 12) {
+                    if (!mouseDown)
+                    {
+                        if (Animation_Frame != 12)
+                        {
                             // フレームを更新
                             Animation_Frame++;
 
@@ -344,10 +402,13 @@ namespace DesktopMascot_Share {
 
                 case Usamaru_Mode.Sleep:
                     //  睡眠
-                    if (!mouseDown) {
-                        if (progressBar_Physical.Value < 100) {
+                    if (!mouseDown)
+                    {
+                        if (progressBar_Physical.Value < 100)
+                        {
 
-                            if (Animation_Frame < 17) {
+                            if (Animation_Frame < 17)
+                            {
                                 // フレームを更新
                                 Animation_Frame++;
                                 // 画像を切り替え
@@ -355,14 +416,19 @@ namespace DesktopMascot_Share {
                                 pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject(resourceName);
                             }
 
-                            if (sleepTimerCounter < 10) {
+                            if (sleepTimerCounter < 10)
+                            {
                                 sleepTimerCounter++;
                                 progressBar_Physical.Value++;
-                            } else {
+                            }
+                            else
+                            {
                                 sleepTimerCounter = 0;
                             }
 
-                        } else {
+                        }
+                        else
+                        {
                             Stop_Image_Change();
                             usamaru_mode = Usamaru_Mode.Stop;
                         }
@@ -373,20 +439,28 @@ namespace DesktopMascot_Share {
 
         }
 
-        private void timer_Physical_Tick(object sender, EventArgs e) {
+        private void timer_Physical_Tick(object sender, EventArgs e)
+        {
 
-            if (progressBar_Physical.Value > 0 && (usamaru_mode != Usamaru_Mode.Sleep)) {
-                if (physicalTimerCounter >= 60) {
+            if (progressBar_Physical.Value > 0 && (usamaru_mode != Usamaru_Mode.Sleep))
+            {
+                if (physicalTimerCounter >= 60)
+                {
 
-                    if ((progressBar_Physical.Value - 1) >= 0) {
+                    if ((progressBar_Physical.Value - 1) >= 0)
+                    {
                         //System.Diagnostics.Debug.WriteLine($"体力減少");
                         progressBar_Physical.Value--;
                     }
                     physicalTimerCounter = 0;
-                } else {
+                }
+                else
+                {
                     physicalTimerCounter++;
                 }
-            } else if ((usamaru_mode != Usamaru_Mode.Sleep) && (usamaru_mode != Usamaru_Mode.PopCone)) {
+            }
+            else if ((usamaru_mode != Usamaru_Mode.Sleep) && (usamaru_mode != Usamaru_Mode.PopCone))
+            {
                 //System.Diagnostics.Debug.WriteLine($"睡眠モードに変換");
                 usamaru_mode = Usamaru_Mode.Sleep;
                 pictureBox1.Image = Properties.Resources.Sleep_1;
@@ -395,19 +469,28 @@ namespace DesktopMascot_Share {
                 timer1.Interval = 200; // 更新速度変更
                 sleepTimerCounter = 0;
             }
-            
-            if (progressBar_Food.Value > 0 && usamaru_mode != Usamaru_Mode.PopCone) {
-                if (foodTimerCounter >= 60) {
-                    if ((progressBar_Food.Value - 2) > 0 && (usamaru_mode == Usamaru_Mode.Patoka)) {
+
+            if (progressBar_Food.Value > 0 && usamaru_mode != Usamaru_Mode.PopCone)
+            {
+                if (foodTimerCounter >= 60)
+                {
+                    if ((progressBar_Food.Value - 2) > 0 && (usamaru_mode == Usamaru_Mode.Patoka))
+                    {
                         progressBar_Food.Value -= 2;
-                    } else if ((progressBar_Food.Value - 1) >= 0) {
+                    }
+                    else if ((progressBar_Food.Value - 1) >= 0)
+                    {
                         progressBar_Food.Value--;
                     }
                     foodTimerCounter = 0;
-                } else {
+                }
+                else
+                {
                     foodTimerCounter++;
                 }
-            } else if (progressBar_Food.Value <= 0 && (usamaru_mode != Usamaru_Mode.Cry) && (usamaru_mode != Usamaru_Mode.Sleep)) {
+            }
+            else if (progressBar_Food.Value <= 0 && (usamaru_mode != Usamaru_Mode.Cry) && (usamaru_mode != Usamaru_Mode.Sleep))
+            {
                 usamaru_mode = Usamaru_Mode.Cry;
                 pictureBox1.Image = Properties.Resources.Cry_1;
                 Animation_Frame = 1;
@@ -418,8 +501,10 @@ namespace DesktopMascot_Share {
         #endregion ----------------- タイマー処理末尾 ----------------------------
 
         #region ----------------- クリックイベント ----------------------------
-        private void pictureBox1_Click(object sender, EventArgs e) {
-            switch (usamaru_mode) {
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            switch (usamaru_mode)
+            {
                 case Usamaru_Mode.Patoka:
                     SoundList.Sound_Patoka();
                     break;
@@ -429,7 +514,8 @@ namespace DesktopMascot_Share {
                     break;
 
                 case Usamaru_Mode.PopCone:
-                    if (Animation_Frame == 18) {
+                    if (Animation_Frame == 18)
+                    {
                         Stop_Image_Change();
                         usamaru_mode = Usamaru_Mode.Stop;
                     }
@@ -441,7 +527,8 @@ namespace DesktopMascot_Share {
             }
         }
 
-        private void Stop_Image_Change() {
+        private void Stop_Image_Change()
+        {
             Image[] Pic_List = new Image[] {
                 Properties.Resources.main,
                 Properties.Resources.main2,
@@ -455,13 +542,16 @@ namespace DesktopMascot_Share {
         #endregion ----------------- クリックイベント末尾 ----------------------------
 
         #region ----------------- 右クリックイベント ----------------------------
-        private void 終了ToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void 終了ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             this.Close();
         }
 
-        private void パトカーToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void パトカーToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
-            if((usamaru_mode != Usamaru_Mode.PopCone) && (usamaru_mode != Usamaru_Mode.Sleep)) {
+            if ((usamaru_mode != Usamaru_Mode.PopCone) && (usamaru_mode != Usamaru_Mode.Sleep))
+            {
                 pictureBox1.Image = Properties.Resources.Patoka_R; // 右向きで開始
                 usamaru_mode = Usamaru_Mode.Patoka;
                 direction = 1; // 右向きに設定
@@ -469,47 +559,70 @@ namespace DesktopMascot_Share {
                 centerY = this.Top;
                 // タイマー設定
                 timer1.Interval = 50; // パトカーは速めに更新
-            } else if(usamaru_mode == Usamaru_Mode.PopCone) {
+            }
+            else if (usamaru_mode == Usamaru_Mode.PopCone)
+            {
                 MessageBox.Show("うさまるはお腹が空いているようです。\nご飯をあげてください。");
-            }else if (usamaru_mode == Usamaru_Mode.Sleep) {
+            }
+            else if (usamaru_mode == Usamaru_Mode.Sleep)
+            {
                 MessageBox.Show("うさまるは疲れて寝ているようです。");
             }
         }
 
-        private void ストップToolStripMenuItem_Click(object sender, EventArgs e) {
-            if ((progressBar_Food.Value > 0) && (usamaru_mode != Usamaru_Mode.Sleep)) {
+        private void ストップToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((progressBar_Food.Value > 0) && (usamaru_mode != Usamaru_Mode.Sleep))
+            {
                 pictureBox1.Image = Properties.Resources.main; // 
                 usamaru_mode = Usamaru_Mode.Stop;
-            } else if (progressBar_Food.Value <= 0) {
+            }
+            else if (progressBar_Food.Value <= 0)
+            {
                 MessageBox.Show("うさまるはお腹が空いているようです。\nご飯をあげてください。");
-            } else if (usamaru_mode == Usamaru_Mode.Sleep) {
+            }
+            else if (usamaru_mode == Usamaru_Mode.Sleep)
+            {
                 MessageBox.Show("うさまるは疲れて寝ているようです。");
             }
         }
 
-        private void ひよこToolStripMenuItem_Click(object sender, EventArgs e) {
-            if ((progressBar_Food.Value > 0) && (usamaru_mode != Usamaru_Mode.Sleep)) {
+        private void ひよこToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((progressBar_Food.Value > 0) && (usamaru_mode != Usamaru_Mode.Sleep))
+            {
                 ItemForm itemForm = new ItemForm(Item_Mode.Hiyoko);
                 itemForm.Show();
-            } else if (progressBar_Food.Value <= 0) {
+            }
+            else if (progressBar_Food.Value <= 0)
+            {
                 MessageBox.Show("うさまるはお腹が空いているようです。\nご飯をあげてください。");
-            } else if (usamaru_mode == Usamaru_Mode.Sleep) {
+            }
+            else if (usamaru_mode == Usamaru_Mode.Sleep)
+            {
                 MessageBox.Show("うさまるは疲れて寝ているようです。");
             }
         }
 
-        private void ポップコーンToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (usamaru_mode != Usamaru_Mode.Sleep) {
+        private void ポップコーンToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (usamaru_mode != Usamaru_Mode.Sleep)
+            {
                 ItemForm itemForm = new ItemForm(Item_Mode.PopCone);
                 itemForm.Show();
-            } else if (usamaru_mode == Usamaru_Mode.PopCone) {
-               
-            } else if (usamaru_mode == Usamaru_Mode.Sleep) {
+            }
+            else if (usamaru_mode == Usamaru_Mode.PopCone)
+            {
+
+            }
+            else if (usamaru_mode == Usamaru_Mode.Sleep)
+            {
                 MessageBox.Show("うさまるは疲れて寝ているようです。");
             }
         }
 
-        private void 体力の表示ToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void 体力の表示ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             progressBar_Food.Visible = !progressBar_Food.Visible;
             progressBar_Physical.Visible = !progressBar_Physical.Visible;
         }
@@ -517,21 +630,26 @@ namespace DesktopMascot_Share {
 
 
         #region ----------------- アイテムをあげた後の処理 ----------------------------
-        public void ChangeToHiyokoGyuMode() {
+        public void ChangeToHiyokoGyuMode()
+        {
 
-            if (progressBar_Food.Value > 0) {
+            if (progressBar_Food.Value > 0)
+            {
 
                 usamaru_mode = Usamaru_Mode.HiyokoGyu;
                 pictureBox1.Image = Properties.Resources.HiyokoGyu_1;
                 Animation_Frame = 1;
                 // タイマー設定
                 timer1.Interval = 200; // 更新速度変更
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("うさまるはお腹が空いているようです。\nご飯をあげてください。");
             }
         }
 
-        public void ChangeToPopConeMode() {
+        public void ChangeToPopConeMode()
+        {
             usamaru_mode = Usamaru_Mode.PopCone;
             pictureBox1.Image = Properties.Resources.PopCone_1;
             Animation_Frame = 1;
