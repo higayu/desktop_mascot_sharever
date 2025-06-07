@@ -550,7 +550,7 @@ namespace DesktopMascot_Share
         private void パトカーToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            if ((usamaru_mode != Usamaru_Mode.PopCone) && (usamaru_mode != Usamaru_Mode.Sleep))
+            if ((progressBar_Food.Value > 0) && (usamaru_mode != Usamaru_Mode.Sleep))
             {
                 pictureBox1.Image = Properties.Resources.Patoka_R; // 右向きで開始
                 usamaru_mode = Usamaru_Mode.Patoka;
@@ -560,7 +560,7 @@ namespace DesktopMascot_Share
                 // タイマー設定
                 timer1.Interval = 50; // パトカーは速めに更新
             }
-            else if (usamaru_mode == Usamaru_Mode.PopCone)
+            else if (progressBar_Food.Value <= 0)
             {
                 MessageBox.Show("うさまるはお腹が空いているようです。\nご飯をあげてください。");
             }
