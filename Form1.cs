@@ -22,7 +22,8 @@ namespace DesktopMascot_Share
         HiyokoGyu,
         PopCone,
         Cry,
-        Sleep
+        Sleep,
+        Cheerleader
     }
     #endregion ----------------- enum うさまるのモード 末尾 ----------------------------
 
@@ -52,6 +53,8 @@ namespace DesktopMascot_Share
         private int physicalTimerCounter = 0; // 体力減少用のカウンター
         private int foodTimerCounter = 0; // 満腹度減少用のカウンター
         private int sleepTimerCounter = 0;//睡眠カウンター
+
+        private Usamaru_Mode Before_Mode;//履歴モード
         #endregion ----------------- フィールド 末尾 ----------------------------
 
         #region ----------------- 初期化 ----------------------------
@@ -295,209 +298,103 @@ namespace DesktopMascot_Share
 
 
         #region ----------------- タイマー処理 ----------------------------
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-
-            switch (usamaru_mode)
+            #region ---- 各モードアクション用タイマー -----
+            private void timer1_Tick(object sender, EventArgs e)
             {
-                case Usamaru_Mode.Patoka:// 自動移動
-                    if (!mouseDown)
+                switch (usamaru_mode)
+                {
+                    case Usamaru_Mode.Patoka:// 自動移動
+                        PatoCar_Action();
+                        break;
+
+                    case Usamaru_Mode.HiyokoGyu:
+                        // ひよこぎゅーアニメーション
+                        HiyokoGyu_Action();
+                        break;
+
+                    case Usamaru_Mode.PopCone:
+                        //  ポップコーンアニメーション
+                        PopCone_Action();
+                        break;
+
+                    case Usamaru_Mode.Cry:
+                        //  Cryアニメーション
+                        Cry_Action();
+                        break;
+
+                    case Usamaru_Mode.Sleep:
+                        //  睡眠
+                        Sleep_Action();
+                        break;
+
+                }
+
+            }
+            #endregion ---- 各モード アクション用タイマー 末尾 -----
+
+            #region ---- 減少系タイマー 末尾 -----
+            private void timer_Physical_Tick(object sender, EventArgs e)
+            {
+                #region ---- 体力減少 -----
+                if (progressBar_Physical.Value > 0 && (usamaru_mode != Usamaru_Mode.Sleep))
+                {
+                    if (physicalTimerCounter >= 60)
                     {
-                        this.Left += speedX * direction;
 
-                        // 画面端で反転
-                        var screenBounds = Screen.PrimaryScreen.WorkingArea;
-                        if (this.Right >= screenBounds.Right || this.Left <= screenBounds.Left)
+                        if ((progressBar_Physical.Value - 1) >= 0)
                         {
-                            direction *= -1;
-                            // 画像を切り替え
-                            pictureBox1.Image = (direction == 1) ? Properties.Resources.Patoka_R : Properties.Resources.Patoka_L;
+                            //System.Diagnostics.Debug.WriteLine($"体力減少");
+                            progressBar_Physical.Value--;
                         }
-
-                        // 浮き沈み
-                        waveCounter += 0.2;
-                        int waveOffset = (int)(Math.Sin(waveCounter) * waveAmplitude);
-                        this.Top = centerY + waveOffset;
+                        physicalTimerCounter = 0;
                     }
                     else
                     {
-                        // ドラッグ中は中心Yを更新
-                        centerY = this.Top;
+                        physicalTimerCounter++;
                     }
-                    break;
-
-                case Usamaru_Mode.HiyokoGyu:
-                    // ひよこぎゅーアニメーション
-                    if (!mouseDown)
-                    {
-                        if (Animation_Frame != 20)
-                        {
-                            // フレームを更新
-                            Animation_Frame = (Animation_Frame + 1);
-
-                            // 画像を切り替え
-                            string resourceName = $"HiyokoGyu_{Animation_Frame}";
-                            pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject(resourceName);
-                        }
-                    }
-                    break;
-
-                case Usamaru_Mode.PopCone:
-                    //  ポップコーンアニメーション
-                    if (!mouseDown)
-                    {
-                        if (Animation_Frame != 18)
-                        {
-
-                            if (Return_Anime_Counter >= 5 && Animation_Frame >= 17)
-                            {
-                                // フレームを更新
-                                Animation_Frame++;
-                            }
-                            else if (Animation_Frame >= 17)
-                            {
-                                Return_Anime_Counter++;
-                                Animation_Frame = 10;
-                            }
-                            else
-                            {
-                                // フレームを更新
-                                if ((progressBar_Food.Value + 1) < 100)
-                                {
-                                    progressBar_Food.Value++;
-                                }
-                                Animation_Frame++;
-                            }
-
-                            // 画像を切り替え
-                            string resourceName = $"PopCone_{Animation_Frame}";
-                            pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject(resourceName);
-                        }
-                        else
-                        {
-                            //if((progressBar1.Value + 10) >= 100) {
-                            //   progressBar1.Value = 100;
-                            //} else {
-                            //    progressBar1.Value += 10;
-                            //}
-                        }
-                    }
-                    break;
-
-                case Usamaru_Mode.Cry:
-                    //  Cryアニメーション
-                    if (!mouseDown)
-                    {
-                        if (Animation_Frame != 12)
-                        {
-                            // フレームを更新
-                            Animation_Frame++;
-
-                            // 画像を切り替え
-                            string resourceName = $"Cry_{Animation_Frame}";
-                            pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject(resourceName);
-                        }
-                    }
-                    break;
-
-                case Usamaru_Mode.Sleep:
-                    //  睡眠
-                    if (!mouseDown)
-                    {
-                        if (progressBar_Physical.Value < 100)
-                        {
-
-                            if (Animation_Frame < 17)
-                            {
-                                // フレームを更新
-                                Animation_Frame++;
-                                // 画像を切り替え
-                                string resourceName = $"Sleep_{Animation_Frame}";
-                                pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject(resourceName);
-                            }
-
-                            if (sleepTimerCounter < 10)
-                            {
-                                sleepTimerCounter++;
-                                progressBar_Physical.Value++;
-                            }
-                            else
-                            {
-                                sleepTimerCounter = 0;
-                            }
-
-                        }
-                        else
-                        {
-                            Stop_Image_Change();
-                            usamaru_mode = Usamaru_Mode.Stop;
-                        }
-                    }
-                    break;
-
-            }
-
-        }
-
-        private void timer_Physical_Tick(object sender, EventArgs e)
-        {
-
-            if (progressBar_Physical.Value > 0 && (usamaru_mode != Usamaru_Mode.Sleep))
-            {
-                if (physicalTimerCounter >= 60)
-                {
-
-                    if ((progressBar_Physical.Value - 1) >= 0)
-                    {
-                        //System.Diagnostics.Debug.WriteLine($"体力減少");
-                        progressBar_Physical.Value--;
-                    }
-                    physicalTimerCounter = 0;
                 }
-                else
+                else if ((usamaru_mode != Usamaru_Mode.Sleep) && (usamaru_mode != Usamaru_Mode.PopCone))
                 {
-                    physicalTimerCounter++;
-                }
-            }
-            else if ((usamaru_mode != Usamaru_Mode.Sleep) && (usamaru_mode != Usamaru_Mode.PopCone))
-            {
-                //System.Diagnostics.Debug.WriteLine($"睡眠モードに変換");
-                usamaru_mode = Usamaru_Mode.Sleep;
-                pictureBox1.Image = Properties.Resources.Sleep_1;
-                Animation_Frame = 5;
-                // タイマー設定
-                timer1.Interval = 200; // 更新速度変更
-                sleepTimerCounter = 0;
-            }
+                    //System.Diagnostics.Debug.WriteLine($"睡眠モードに変換");
+                    Before_Mode = usamaru_mode;//履歴を保存
+                    usamaru_mode = Usamaru_Mode.Sleep;
 
-            if (progressBar_Food.Value > 0 && usamaru_mode != Usamaru_Mode.PopCone)
-            {
-                if (foodTimerCounter >= 60)
-                {
-                    if ((progressBar_Food.Value - 2) > 0 && (usamaru_mode == Usamaru_Mode.Patoka))
-                    {
-                        progressBar_Food.Value -= 2;
-                    }
-                    else if ((progressBar_Food.Value - 1) >= 0)
-                    {
-                        progressBar_Food.Value--;
-                    }
-                    foodTimerCounter = 0;
+                    pictureBox1.Image = Properties.Resources.Sleep_1;
+                    Animation_Frame = 5;
+                    // タイマー設定
+                    timer1.Interval = 200; // 更新速度変更
+                    sleepTimerCounter = 0;
                 }
-                else
+                #endregion ---- 体力減少 末尾 -----
+
+                #region ---- 食事減少 ----
+                if (progressBar_Food.Value > 0 && usamaru_mode != Usamaru_Mode.PopCone)
                 {
-                    foodTimerCounter++;
+                    if (foodTimerCounter >= 60)
+                    {
+                        if ((progressBar_Food.Value - 2) > 0 && (usamaru_mode == Usamaru_Mode.Patoka))
+                        {
+                            progressBar_Food.Value -= 2;
+                        }
+                        else if ((progressBar_Food.Value - 1) >= 0)
+                        {
+                            progressBar_Food.Value--;
+                        }
+                        foodTimerCounter = 0;
+                    }
+                    else
+                    {
+                        foodTimerCounter++;
+                    }
                 }
+                else if (progressBar_Food.Value <= 0 && (usamaru_mode != Usamaru_Mode.Cry) && (usamaru_mode != Usamaru_Mode.Sleep))
+                {
+                    Cry_Change();
+                }
+                #endregion ---- 食事減少 末尾 -----
             }
-            else if (progressBar_Food.Value <= 0 && (usamaru_mode != Usamaru_Mode.Cry) && (usamaru_mode != Usamaru_Mode.Sleep))
-            {
-                usamaru_mode = Usamaru_Mode.Cry;
-                pictureBox1.Image = Properties.Resources.Cry_1;
-                Animation_Frame = 1;
-                // タイマー設定
-                timer1.Interval = 200; // 更新速度変更
-            }
-        }
+            #endregion ---- 減少系タイマー 末尾 -----
+
         #endregion ----------------- タイマー処理末尾 ----------------------------
 
         #region ----------------- クリックイベント ----------------------------
@@ -516,8 +413,7 @@ namespace DesktopMascot_Share
                 case Usamaru_Mode.PopCone:
                     if (Animation_Frame == 18)
                     {
-                        Stop_Image_Change();
-                        usamaru_mode = Usamaru_Mode.Stop;
+                        Eat_Sleep_After_Change();
                     }
                     break;
 
@@ -526,9 +422,10 @@ namespace DesktopMascot_Share
                     break;
             }
         }
+        #endregion ----------------- クリックイベント末尾 ----------------------------
 
-        private void Stop_Image_Change()
-        {
+        #region --------------------- モードチェンジ関数 ---------------------------
+        private void Stop_Image_Change() {
             Image[] Pic_List = new Image[] {
                 Properties.Resources.main,
                 Properties.Resources.main2,
@@ -538,8 +435,60 @@ namespace DesktopMascot_Share
             Random rnd = new Random();      // Randomオブジェクトを作成
             int num = rnd.Next(0, 3);        // 0から50までの値をランダムに取得
             pictureBox1.Image = Pic_List[num];
+            usamaru_mode = Usamaru_Mode.Stop;
         }
-        #endregion ----------------- クリックイベント末尾 ----------------------------
+
+        private void Patoka_Change() {
+            pictureBox1.Image = Properties.Resources.Patoka_R; // 右向きで開始
+            usamaru_mode = Usamaru_Mode.Patoka;
+            direction = 1; // 右向きに設定
+                           // パトカーモード開始時の位置を保存
+            centerY = this.Top;
+            // タイマー設定
+            timer1.Interval = 50; // パトカーは速めに更新
+        }
+        private void Hiyoko_Change() {
+            Before_Mode = usamaru_mode;//履歴を保存
+            usamaru_mode = Usamaru_Mode.HiyokoGyu;
+
+            pictureBox1.Image = Properties.Resources.HiyokoGyu_1;
+            Animation_Frame = 1;
+            // タイマー設定
+            timer1.Interval = 200; // 更新速度変更
+        }
+        public void PopCone_Change() {
+            Before_Mode = usamaru_mode;//履歴を保存
+            usamaru_mode = Usamaru_Mode.PopCone;
+
+            pictureBox1.Image = Properties.Resources.PopCone_1;
+            Animation_Frame = 1;
+            Return_Anime_Counter = 0;
+            // タイマー設定
+            timer1.Interval = 200; // 更新速度変更
+        }
+        public void Cry_Change() {
+            Before_Mode = usamaru_mode;//履歴を保存
+            usamaru_mode = Usamaru_Mode.Cry;
+
+            pictureBox1.Image = Properties.Resources.Cry_1;
+            Animation_Frame = 1;
+            // タイマー設定
+            timer1.Interval = 200; // 更新速度変更
+        }
+
+        private void Eat_Sleep_After_Change() {
+
+            switch (Before_Mode) {
+                case Usamaru_Mode.Patoka:
+                    Patoka_Change();
+                    break;
+
+                default:
+                    Stop_Image_Change();
+                    break;
+            }
+        }
+        #endregion ------------------ モードチェンジ関数 末尾------------------------------------------
 
         #region ----------------- 右クリックイベント ----------------------------
         private void 終了ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -552,13 +501,7 @@ namespace DesktopMascot_Share
 
             if ((progressBar_Food.Value > 0) && (usamaru_mode != Usamaru_Mode.Sleep))
             {
-                pictureBox1.Image = Properties.Resources.Patoka_R; // 右向きで開始
-                usamaru_mode = Usamaru_Mode.Patoka;
-                direction = 1; // 右向きに設定
-                               // パトカーモード開始時の位置を保存
-                centerY = this.Top;
-                // タイマー設定
-                timer1.Interval = 50; // パトカーは速めに更新
+                Patoka_Change();
             }
             else if (progressBar_Food.Value <= 0)
             {
@@ -574,8 +517,7 @@ namespace DesktopMascot_Share
         {
             if ((progressBar_Food.Value > 0) && (usamaru_mode != Usamaru_Mode.Sleep))
             {
-                pictureBox1.Image = Properties.Resources.main; // 
-                usamaru_mode = Usamaru_Mode.Stop;
+                Stop_Image_Change();
             }
             else if (progressBar_Food.Value <= 0)
             {
@@ -626,38 +568,133 @@ namespace DesktopMascot_Share
             progressBar_Food.Visible = !progressBar_Food.Visible;
             progressBar_Physical.Visible = !progressBar_Physical.Visible;
         }
+        private void 応援ToolStripMenuItem_Click(object sender, EventArgs e) {
+            pictureBox1.Image = Properties.Resources.Cheerleader; //
+            usamaru_mode = Usamaru_Mode.Cheerleader;
+            centerY = this.Top;
+            // タイマー設定
+            timer1.Interval = 200; //
+        }
         #endregion ----------------- 右クリック末尾 ----------------------------
 
 
         #region ----------------- アイテムをあげた後の処理 ----------------------------
-        public void ChangeToHiyokoGyuMode()
-        {
-
-            if (progressBar_Food.Value > 0)
-            {
-
-                usamaru_mode = Usamaru_Mode.HiyokoGyu;
-                pictureBox1.Image = Properties.Resources.HiyokoGyu_1;
-                Animation_Frame = 1;
-                // タイマー設定
-                timer1.Interval = 200; // 更新速度変更
-            }
-            else
-            {
+        public void ChangeToHiyokoGyuMode() {
+            if (progressBar_Food.Value > 0) {
+                Hiyoko_Change();
+            } else {
                 MessageBox.Show("うさまるはお腹が空いているようです。\nご飯をあげてください。");
             }
         }
-
-        public void ChangeToPopConeMode()
-        {
-            usamaru_mode = Usamaru_Mode.PopCone;
-            pictureBox1.Image = Properties.Resources.PopCone_1;
-            Animation_Frame = 1;
-            Return_Anime_Counter = 0;
-            // タイマー設定
-            timer1.Interval = 200; // 更新速度変更
+        public void ChangeToPopConeMode() {
+            if (Usamaru_Mode.Sleep == usamaru_mode) {
+                MessageBox.Show("うさまるは疲れて寝ているようです。");
+            } else {
+                PopCone_Change();
+            }
         }
         #endregion -----------------  ----------------------------
 
+        #region ---- 各モードアクション -----
+        private void PatoCar_Action() {
+            if (!mouseDown) {
+                this.Left += speedX * direction;
+
+                // 画面端で反転
+                var screenBounds = Screen.PrimaryScreen.WorkingArea;
+                if (this.Right >= screenBounds.Right || this.Left <= screenBounds.Left) {
+                    direction *= -1;
+                    // 画像を切り替え
+                    pictureBox1.Image = (direction == 1) ? Properties.Resources.Patoka_R : Properties.Resources.Patoka_L;
+                }
+
+                // 浮き沈み
+                waveCounter += 0.2;
+                int waveOffset = (int)(Math.Sin(waveCounter) * waveAmplitude);
+                this.Top = centerY + waveOffset;
+            } else {
+                // ドラッグ中は中心Yを更新
+                centerY = this.Top;
+            }
+        }
+        private void HiyokoGyu_Action() {
+            if (!mouseDown) {
+                if (Animation_Frame != 20) {
+                    // フレームを更新
+                    Animation_Frame = (Animation_Frame + 1);
+
+                    // 画像を切り替え
+                    string resourceName = $"HiyokoGyu_{Animation_Frame}";
+                    pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject(resourceName);
+                }
+            }
+        }
+        private void PopCone_Action() {
+            if (!mouseDown) {
+                if (Animation_Frame != 18) {
+
+                    if (Return_Anime_Counter >= 5 && Animation_Frame >= 17) {
+                        // フレームを更新
+                        Animation_Frame++;
+                    } else if (Animation_Frame >= 17) {
+                        Return_Anime_Counter++;
+                        Animation_Frame = 10;
+                    } else {
+                        // フレームを更新
+                        if ((progressBar_Food.Value + 1) < 100) {
+                            progressBar_Food.Value++;
+                        }
+                        Animation_Frame++;
+                    }
+
+                    // 画像を切り替え
+                    string resourceName = $"PopCone_{Animation_Frame}";
+                    pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject(resourceName);
+                } else {
+                    //if((progressBar1.Value + 10) >= 100) {
+                    //   progressBar1.Value = 100;
+                    //} else {
+                    //    progressBar1.Value += 10;
+                    //}
+                }
+            }
+        }
+        private void Cry_Action() {
+            if (!mouseDown) {
+                if (Animation_Frame != 12) {
+                    // フレームを更新
+                    Animation_Frame++;
+
+                    // 画像を切り替え
+                    string resourceName = $"Cry_{Animation_Frame}";
+                    pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject(resourceName);
+                }
+            }
+        }
+        private void Sleep_Action() {
+            if (!mouseDown) {
+                if (progressBar_Physical.Value < 100) {
+
+                    if (Animation_Frame < 17) {
+                        // フレームを更新
+                        Animation_Frame++;
+                        // 画像を切り替え
+                        string resourceName = $"Sleep_{Animation_Frame}";
+                        pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject(resourceName);
+                    }
+
+                    if (sleepTimerCounter < 10) {
+                        sleepTimerCounter++;
+                        progressBar_Physical.Value++;
+                    } else {
+                        sleepTimerCounter = 0;
+                    }
+
+                } else {
+                    Eat_Sleep_After_Change();
+                }
+            }
+        }
+        #endregion ---- 各モード アクション 末尾 -----
     }
 }

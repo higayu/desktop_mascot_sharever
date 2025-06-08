@@ -72,6 +72,16 @@ namespace DesktopMascot_Share.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap Cheerleader {
+            get {
+                object obj = ResourceManager.GetObject("Cheerleader", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap Cry_1 {
             get {
                 object obj = ResourceManager.GetObject("Cry_1", resourceCulture);
@@ -862,6 +872,16 @@ namespace DesktopMascot_Share.Properties {
             get {
                 object obj = ResourceManager.GetObject("usamaru", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap Yorokobi {
+            get {
+                object obj = ResourceManager.GetObject("Yorokobi", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

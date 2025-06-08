@@ -40,6 +40,7 @@ namespace DesktopMascot_Share {
             this.timer_Physical = new System.Windows.Forms.Timer(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.progressBar_Physical = new System.Windows.Forms.ProgressBar();
+            this.応援ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -72,8 +73,8 @@ namespace DesktopMascot_Share {
             this.ストップToolStripMenuItem,
             this.ひよこToolStripMenuItem,
             this.ポップコーンToolStripMenuItem,
-            this.体力の表示ToolStripMenuItem
-            });
+            this.応援ToolStripMenuItem,
+            this.体力の表示ToolStripMenuItem});
             this.アクションToolStripMenuItem.Name = "アクションToolStripMenuItem";
             this.アクションToolStripMenuItem.Size = new System.Drawing.Size(222, 50);
             this.アクションToolStripMenuItem.Text = "アクション";
@@ -177,6 +178,13 @@ namespace DesktopMascot_Share {
             this.progressBar_Physical.TabIndex = 3;
             this.progressBar_Physical.Visible = false;
             // 
+            // 応援ToolStripMenuItem
+            // 
+            this.応援ToolStripMenuItem.Name = "応援ToolStripMenuItem";
+            this.応援ToolStripMenuItem.Size = new System.Drawing.Size(393, 50);
+            this.応援ToolStripMenuItem.Text = "応援";
+            this.応援ToolStripMenuItem.Click += new System.EventHandler(this.応援ToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -224,6 +232,7 @@ namespace DesktopMascot_Share {
         private System.Windows.Forms.Timer timer_Physical;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ProgressBar progressBar_Physical;
+        private System.Windows.Forms.ToolStripMenuItem 応援ToolStripMenuItem;
     }
 }
 
