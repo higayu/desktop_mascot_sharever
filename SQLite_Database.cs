@@ -4,7 +4,7 @@ using System.Data.SQLite;
 
 namespace DesktopMascot_Share {
     public class SQLite_Database {
-        private readonly string connectionString = "Data Source=DesktopMascot_Share.db";
+        private readonly string connectionString = "Data Source=desktopmascot.db";
 
         public SQLite_Database() {
             using (var connection = new SQLiteConnection(connectionString)) {
@@ -164,28 +164,6 @@ namespace DesktopMascot_Share {
         }
 
 
-
-        public void MarkTaskAsUndone(int id) {
-            using (var conn = new SQLiteConnection(connectionString)) {
-                conn.Open();
-                var cmd = new SQLiteCommand("UPDATE desktopmemo SET item_state = 0 WHERE data_id = @id", conn);
-                cmd.Parameters.AddWithValue("@id", id);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        public void DeleteTasksByGroup(string group) {
-            if (string.IsNullOrWhiteSpace(group))
-                throw new ArgumentException("グループ名が空です。", nameof(group));
-
-            using (var conn = new SQLiteConnection(connectionString)) {
-                conn.Open();
-                var cmd = new SQLiteCommand("DELETE FROM desktopmemo WHERE item_type = 'task' AND item_group = @group", conn);
-                cmd.Parameters.AddWithValue("@group", group);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         // AI会話履歴の保存
         public void SaveAiConversation(string question, string answer, string title = null) {
             using (var conn = new SQLiteConnection(connectionString)) {
@@ -193,7 +171,7 @@ namespace DesktopMascot_Share {
                 var cmd = new SQLiteCommand(@"
                     INSERT INTO ai_conversations (title, question, answer, created_at) 
                     VALUES (@title, @question, @answer, @created_at)", conn);
-                
+
                 cmd.Parameters.AddWithValue("@title", title != null ? (object)title : DBNull.Value);
                 cmd.Parameters.AddWithValue("@question", question);
                 cmd.Parameters.AddWithValue("@answer", answer);
@@ -230,6 +208,21 @@ namespace DesktopMascot_Share {
                 var cmd = new SQLiteCommand("DELETE FROM ai_conversations WHERE conversation_id = @id", conn);
                 cmd.Parameters.AddWithValue("@id", conversationId);
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+        // 1週間以上過去のクリップボードデータを削除
+        public void DeleteOldClipboardData() {
+            using (var conn = new SQLiteConnection(connectionString)) {
+                conn.Open();
+                // 1週間前の日時を計算
+                var oneWeekAgo = DateTime.Now.AddDays(-7);
+
+                var cmd = new SQLiteCommand("DELETE FROM desktopmemo WHERE update_at < @oneWeekAgo", conn);
+                cmd.Parameters.AddWithValue("@oneWeekAgo", oneWeekAgo);
+                int deletedCount = cmd.ExecuteNonQuery();
+
+                System.Diagnostics.Debug.WriteLine($"削除された古いクリップボードデータ: {deletedCount}件");
             }
         }
     }

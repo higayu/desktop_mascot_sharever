@@ -59,3 +59,4 @@ E:\_共有用_フォルダ\_desktop_マスコット_うさまる\obj\Release\Des
 E:\_共有用_フォルダ\_desktop_マスコット_うさまる\obj\Release\DesktopMascot_Share_usamaru.csproj.CopyComplete
 E:\_共有用_フォルダ\_desktop_マスコット_うさまる\obj\Release\DesktopMascot_Usamaru.exe
 E:\_共有用_フォルダ\_desktop_マスコット_うさまる\obj\Release\DesktopMascot_Usamaru.pdb
+E:\_共有用_フォルダ\_desktop_マスコット_うさまる\obj\Release\DesktopMascot_Share_usamaru.csproj.AssemblyReference.cache

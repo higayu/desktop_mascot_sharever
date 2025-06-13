@@ -88,13 +88,16 @@ namespace DesktopMascot_Share
             this.MouseMove += Form1_MouseMove;
             this.MouseUp += Form1_MouseUp;
 
-            //clipboardHistory = new ClipboardHistoryManager();
+            clipboardHistory = new ClipboardHistoryManager();
 
             this.contextMenuStrip1.Items.Add("ファイルのパスを作成", null, Get_File_Paths);
-            //this.contextMenuStrip1.Items.Add("コピー履歴を見る", null, ShowClipboardHistory);
+            this.contextMenuStrip1.Items.Add("コピー履歴を見る", null, ShowClipboardHistory);
 
             progressBar_Food.Style = ProgressBarStyle.Continuous;
             progressBar_Physical.Style = ProgressBarStyle.Continuous;
+
+            // 1週間以上過去のクリップボードデータを削除
+            CleanupOldClipboardData();
             // 非同期でデータを取得
             _ = InitializeFirebaseDataAsync();
         }
@@ -111,6 +114,19 @@ namespace DesktopMascot_Share
                 System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                 MessageBox.Show($"データの初期化中にエラーが発生しました: {ex.Message}", "エラー",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        // 1週間以上過去のクリップボードデータを削除
+        private void CleanupOldClipboardData() {
+            try {
+                var database = new SQLite_Database();
+                database.DeleteOldClipboardData();
+                System.Diagnostics.Debug.WriteLine("古いクリップボードデータの削除が完了しました。");
+            } catch (Exception ex) {
+                System.Diagnostics.Debug.WriteLine($"古いクリップボードデータの削除中にエラーが発生しました: {ex.Message}");
+                // エラーが発生してもアプリの起動は継続する
             }
         }
         #endregion ----------------- 初期化 末尾 ----------------------------
