@@ -439,8 +439,10 @@ namespace DesktopMascot_Share
         }
 
         private void Patoka_Change() {
-            pictureBox1.Image = Properties.Resources.Patoka_R; // 右向きで開始
+            Before_Mode = Usamaru_Mode.Patoka;//履歴を保存
             usamaru_mode = Usamaru_Mode.Patoka;
+
+            pictureBox1.Image = Properties.Resources.Patoka_R; // 右向きで開始
             direction = 1; // 右向きに設定
                            // パトカーモード開始時の位置を保存
             centerY = this.Top;
@@ -467,7 +469,10 @@ namespace DesktopMascot_Share
             timer1.Interval = 200; // 更新速度変更
         }
         public void Cry_Change() {
-            Before_Mode = usamaru_mode;//履歴を保存
+            if(usamaru_mode != Usamaru_Mode.Cry)
+            {
+                Before_Mode = usamaru_mode;//履歴を保存
+            }
             usamaru_mode = Usamaru_Mode.Cry;
 
             pictureBox1.Image = Properties.Resources.Cry_1;
