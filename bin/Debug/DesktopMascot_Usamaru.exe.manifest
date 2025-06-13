@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DesktopMascot_Usamaru.exe" size="8704992">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DesktopMascot_Usamaru.exe" size="8704480">
       <assemblyIdentity name="DesktopMascot_Usamaru" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>ShMKPSs1/h+M756pxJZNIxarr7RhiU0UPt0+tZ7AYXU=</dsig:DigestValue>
+        <dsig:DigestValue>Rbnd45Is/2uqkq/QQXaxo7wY2W3mqoP7PpvTwYDD8pw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -88,10 +88,10 @@ namespace DesktopMascot_Share
             this.MouseMove += Form1_MouseMove;
             this.MouseUp += Form1_MouseUp;
 
-            clipboardHistory = new ClipboardHistoryManager();
+            //clipboardHistory = new ClipboardHistoryManager();
 
             this.contextMenuStrip1.Items.Add("ファイルのパスを作成", null, Get_File_Paths);
-            this.contextMenuStrip1.Items.Add("コピー履歴を見る", null, ShowClipboardHistory);
+            //this.contextMenuStrip1.Items.Add("コピー履歴を見る", null, ShowClipboardHistory);
 
             progressBar_Food.Style = ProgressBarStyle.Continuous;
             progressBar_Physical.Style = ProgressBarStyle.Continuous;
