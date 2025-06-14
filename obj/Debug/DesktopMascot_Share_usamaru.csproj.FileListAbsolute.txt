@@ -407,3 +407,7 @@ C:\Users\higay\Documents\_desktop_マスコット_うさまる\obj\Debug\Desktop
 C:\Users\higay\Documents\_desktop_マスコット_うさまる\obj\Debug\DesktopMascot_Share_usamaru.csproj.CopyComplete
 C:\Users\higay\Documents\_desktop_マスコット_うさまる\obj\Debug\DesktopMascot_Usamaru.exe
 C:\Users\higay\Documents\_desktop_マスコット_うさまる\obj\Debug\DesktopMascot_Usamaru.pdb
+E:\_共有用_フォルダ\_desktop_マスコット_うさまる\bin\Debug\DesktopMascot_Usamaru.exe.manifest
+E:\_共有用_フォルダ\_desktop_マスコット_うさまる\bin\Debug\DesktopMascot_Usamaru.application
+E:\_共有用_フォルダ\_desktop_マスコット_うさまる\obj\Debug\DesktopMascot_Usamaru.exe.manifest
+E:\_共有用_フォルダ\_desktop_マスコット_うさまる\obj\Debug\DesktopMascot_Usamaru.application

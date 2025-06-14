@@ -256,19 +256,6 @@ namespace DesktopMascot_Share
             ClipboardHistoryForm historyForm = new ClipboardHistoryForm(clipboardHistory);
             historyForm.Show();
         }
-
-        private void Fixed_mode_change(object sender, EventArgs e) {
-
-            progressBar_Food.Value = 100;
-            Patoka_Change();
-
-            Fixed_Flg = !Fixed_Flg;
-            if (Fixed_Flg) {
-                Fixed_moji = "固定モードOFF";
-            } else {
-                Fixed_moji = "固定モードON";
-            }
-        }
         #endregion ----------------- 便利機能 末尾 ----------------------------
 
         #region ----------------- マウス ----------------------------
@@ -536,6 +523,7 @@ namespace DesktopMascot_Share
 
         private void ストップToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Fixed_mode_OFF();
             if ((progressBar_Food.Value > 0) && (usamaru_mode != Usamaru_Mode.Sleep))
             {
                 Stop_Image_Change();
@@ -590,17 +578,38 @@ namespace DesktopMascot_Share
             progressBar_Physical.Visible = !progressBar_Physical.Visible;
         }
         private void 応援ToolStripMenuItem_Click(object sender, EventArgs e) {
+            Fixed_mode_OFF();
             pictureBox1.Image = Properties.Resources.Cheerleader; //
             usamaru_mode = Usamaru_Mode.Cheerleader;
             centerY = this.Top;
             // タイマー設定
             timer1.Interval = 200; //
         }
+
+        private void Fixed_mode_change(object sender, EventArgs e) {
+
+            Fixed_Flg = !Fixed_Flg;
+            if (Fixed_Flg) {
+                Fixed_moji = "固定モードOFF";
+                progressBar_Food.Value = 100;
+                Patoka_Change();
+            } else {
+                Fixed_moji = "固定モードON";
+            }
+            contextMenuStrip1.Items[4].Text = Fixed_moji;
+        }
+
+        private void Fixed_mode_OFF() {
+            Fixed_Flg = false;
+            Fixed_moji = "固定モードON";
+            contextMenuStrip1.Items[4].Text = Fixed_moji;
+        }
         #endregion ----------------- 右クリック末尾 ----------------------------
 
 
         #region ----------------- アイテムをあげた後の処理 ----------------------------
         public void ChangeToHiyokoGyuMode() {
+            Fixed_mode_OFF();
             if (progressBar_Food.Value > 0) {
                 Hiyoko_Change();
             } else {
@@ -608,6 +617,7 @@ namespace DesktopMascot_Share
             }
         }
         public void ChangeToPopConeMode() {
+            Fixed_mode_OFF();
             if (Usamaru_Mode.Sleep == usamaru_mode) {
                 MessageBox.Show("うさまるは疲れて寝ているようです。");
             } else {
