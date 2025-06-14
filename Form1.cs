@@ -36,6 +36,8 @@ namespace DesktopMascot_Share
         // ドラッグ用
         private bool mouseDown = false;
         private Point mouseOffset;
+        private bool Fixed_Flg = false;
+        private string Fixed_moji = "固定モードON";
 
         //移動するフラグ
         private Usamaru_Mode usamaru_mode = Usamaru_Mode.Stop;
@@ -92,6 +94,7 @@ namespace DesktopMascot_Share
 
             this.contextMenuStrip1.Items.Add("ファイルのパスを作成", null, Get_File_Paths);
             this.contextMenuStrip1.Items.Add("コピー履歴を見る", null, ShowClipboardHistory);
+            this.contextMenuStrip1.Items.Add(Fixed_moji, null, Fixed_mode_change);
 
             progressBar_Food.Style = ProgressBarStyle.Continuous;
             progressBar_Physical.Style = ProgressBarStyle.Continuous;
@@ -136,7 +139,6 @@ namespace DesktopMascot_Share
         {
             try
             {
-
                 // 設定の処理
             }
             catch (Exception ex)
@@ -254,6 +256,19 @@ namespace DesktopMascot_Share
             ClipboardHistoryForm historyForm = new ClipboardHistoryForm(clipboardHistory);
             historyForm.Show();
         }
+
+        private void Fixed_mode_change(object sender, EventArgs e) {
+
+            progressBar_Food.Value = 100;
+            Patoka_Change();
+
+            Fixed_Flg = !Fixed_Flg;
+            if (Fixed_Flg) {
+                Fixed_moji = "固定モードOFF";
+            } else {
+                Fixed_moji = "固定モードON";
+            }
+        }
         #endregion ----------------- 便利機能 末尾 ----------------------------
 
         #region ----------------- マウス ----------------------------
@@ -346,70 +361,55 @@ namespace DesktopMascot_Share
                 }
 
             }
-            #endregion ---- 各モード アクション用タイマー 末尾 -----
+        #endregion ---- 各モード アクション用タイマー 末尾 -----
 
-            #region ---- 減少系タイマー 末尾 -----
-            private void timer_Physical_Tick(object sender, EventArgs e)
-            {
-                #region ---- 体力減少 -----
-                if (progressBar_Physical.Value > 0 && (usamaru_mode != Usamaru_Mode.Sleep))
-                {
-                    if (physicalTimerCounter >= 60)
-                    {
+        #region ---- 減少系タイマー 末尾 -----
+        private void timer_Physical_Tick(object sender, EventArgs e) {
+            #region ---- 体力減少 -----
+            if (progressBar_Physical.Value > 0 && (usamaru_mode != Usamaru_Mode.Sleep)) {
+                if (physicalTimerCounter >= 60) {
 
-                        if ((progressBar_Physical.Value - 1) >= 0)
-                        {
-                            //System.Diagnostics.Debug.WriteLine($"体力減少");
-                            progressBar_Physical.Value--;
-                        }
-                        physicalTimerCounter = 0;
+                    if ((progressBar_Physical.Value - 1) >= 0) {
+                        //System.Diagnostics.Debug.WriteLine($"体力減少");
+                        progressBar_Physical.Value--;
                     }
-                    else
-                    {
-                        physicalTimerCounter++;
-                    }
+                    physicalTimerCounter = 0;
+                } else {
+                    physicalTimerCounter++;
                 }
-                else if ((usamaru_mode != Usamaru_Mode.Sleep) && (usamaru_mode != Usamaru_Mode.PopCone))
-                {
-                    //System.Diagnostics.Debug.WriteLine($"睡眠モードに変換");
-                    Before_Mode = usamaru_mode;//履歴を保存
-                    usamaru_mode = Usamaru_Mode.Sleep;
+            } else if ((usamaru_mode != Usamaru_Mode.Sleep) && (usamaru_mode != Usamaru_Mode.PopCone)) {
+                //System.Diagnostics.Debug.WriteLine($"睡眠モードに変換");
+                Before_Mode = usamaru_mode;//履歴を保存
+                usamaru_mode = Usamaru_Mode.Sleep;
 
-                    pictureBox1.Image = Properties.Resources.Sleep_1;
-                    Animation_Frame = 5;
-                    // タイマー設定
-                    timer1.Interval = 200; // 更新速度変更
-                    sleepTimerCounter = 0;
-                }
-                #endregion ---- 体力減少 末尾 -----
+                pictureBox1.Image = Properties.Resources.Sleep_1;
+                Animation_Frame = 5;
+                // タイマー設定
+                timer1.Interval = 200; // 更新速度変更
+                sleepTimerCounter = 0;
+            }
+            #endregion ---- 体力減少 末尾 -----
 
+            if (!Fixed_Flg) {
                 #region ---- 食事減少 ----
-                if (progressBar_Food.Value > 0 && usamaru_mode != Usamaru_Mode.PopCone)
-                {
-                    if (foodTimerCounter >= 60)
-                    {
-                        if ((progressBar_Food.Value - 2) > 0 && (usamaru_mode == Usamaru_Mode.Patoka))
-                        {
+                if (progressBar_Food.Value > 0 && usamaru_mode != Usamaru_Mode.PopCone) {
+                    if (foodTimerCounter >= 60) {
+                        if ((progressBar_Food.Value - 2) > 0 && (usamaru_mode == Usamaru_Mode.Patoka)) {
                             progressBar_Food.Value -= 2;
-                        }
-                        else if ((progressBar_Food.Value - 1) >= 0)
-                        {
+                        } else if ((progressBar_Food.Value - 1) >= 0) {
                             progressBar_Food.Value--;
                         }
                         foodTimerCounter = 0;
-                    }
-                    else
-                    {
+                    } else {
                         foodTimerCounter++;
                     }
-                }
-                else if (progressBar_Food.Value <= 0 && (usamaru_mode != Usamaru_Mode.Cry) && (usamaru_mode != Usamaru_Mode.Sleep))
-                {
+                } else if (progressBar_Food.Value <= 0 && (usamaru_mode != Usamaru_Mode.Cry) && (usamaru_mode != Usamaru_Mode.Sleep)) {
                     Cry_Change();
                 }
                 #endregion ---- 食事減少 末尾 -----
             }
             #endregion ---- 減少系タイマー 末尾 -----
+        }
 
         #endregion ----------------- タイマー処理末尾 ----------------------------
 
